@@ -8,11 +8,12 @@ reserved = {
     'octal': 'FMT_OCTAL',
     'decimal': 'FMT_DECIMAL',
     'hexadecimal': 'FMT_HEXADECIMAL',
-    'roman': 'FMT_ROMAN'
+    'roman': 'FMT_ROMAN',
+    'ternary': 'FMT_TERNARY'
 }
 
 tokens = [
-    'DECIMAL', 'BINARY', 'OCTAL', 'HEXADECIMAL', 'ROMAN'
+    'DECIMAL', 'BINARY', 'OCTAL', 'HEXADECIMAL', 'ROMAN', 'TERNARY'
 ] + list(reserved.values())
 
 t_ignore = ' \t'
@@ -24,6 +25,15 @@ def t_BINARY(t):
         return t
     except ValueError:
         print(f"Error: numero binario invalido '{t.value}'")
+        t.lexer.skip(len(t.value))
+
+def t_TERNARY(t):
+    r'0[tT][0-2]+'
+    try:
+        int(t.value[2:], 3)  # base 3
+        return t
+    except ValueError:
+        print(f"Error: número ternario inválido '{t.value}'")
         t.lexer.skip(len(t.value))
 
 def t_OCTAL(t):

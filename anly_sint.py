@@ -22,7 +22,7 @@ def p_convert(p):
 
     if target_format == 'random':
         original_format = get_original_format(num_str)
-        formats = ['binary', 'octal', 'hexadecimal', 'decimal', 'roman']
+        formats = ['binary', 'octal', 'hexadecimal', 'decimal', 'roman', 'ternary']
         formats.remove(original_format)
         target_format = random.choice(formats)
     
@@ -37,6 +37,8 @@ def p_convert(p):
             result = str(num)
         elif target_format == 'roman':
             result = int_to_roman(num)
+        elif target_format == 'ternary':
+            result = int_to_base(num, 3)
         else:
             result = "Formato no válido"
     except ValueError as e:
@@ -49,7 +51,8 @@ def p_number(p):
               | OCTAL
               | HEXADECIMAL
               | DECIMAL
-              | ROMAN'''
+              | ROMAN
+              | TERNARY'''
     base = 10
     prefix = p[1][:2].lower() if isinstance(p[1], str) else ''
 
@@ -59,6 +62,8 @@ def p_number(p):
         base = 8
     elif prefix == '0x':
         base = 16
+    elif prefix == '0t':
+        base = 3
     
     if isinstance(p[1], int):
         p[0] = ('roman', p[1])
@@ -71,6 +76,7 @@ def p_format(p):
               | FMT_DECIMAL
               | FMT_HEXADECIMAL
               | FMT_ROMAN
+              | FMT_TERNARY
               | RANDOM'''
     p[0] = p[1].lower()
 
@@ -99,6 +105,17 @@ def int_to_roman(num):
         i += 1
 
     return roman
+
+def int_to_base(num, base):
+    if num == 0:
+        return '0'
+    
+    digits = []
+    while num:
+        digits.append(str(num % base))
+        num //= base
+
+    return ''.join(reversed(digits))
 
 def p_error(p):
     if p:

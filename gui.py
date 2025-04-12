@@ -19,11 +19,11 @@ class ConverterApp(QWidget):
 
         self.from_label = QLabel("Formato de origen:")
         self.from_combo = QComboBox()
-        self.from_combo.addItems(["decimal", "binary", "octal", "hexadecimal", "roman"])
+        self.from_combo.addItems(["decimal", "binary", "ternary", "octal", "hexadecimal", "roman"])
 
         self.to_label = QLabel("Formato de destino:")
         self.to_combo = QComboBox()
-        self.to_combo.addItems(["decimal", "binary", "octal", "hexadecimal", "roman", "random"])
+        self.to_combo.addItems(["decimal", "binary", "ternary", "octal", "hexadecimal", "roman", "random"])
 
         self.convert_button = QPushButton("Convertir")
         self.convert_button.clicked.connect(self.convert)
@@ -67,6 +67,8 @@ class ConverterApp(QWidget):
     def add_prefix(self, number, fmt):
         if fmt == "binary" and not number.startswith("0b"):
             return "0b" + number
+        elif fmt == "ternary" and not number.startswith("0t"):
+            return "0t" + number
         elif fmt == "octal" and not number.startswith("0o"):
             return "0o" + number
         elif fmt == "hexadecimal" and not number.startswith("0x"):
