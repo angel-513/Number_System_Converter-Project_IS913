@@ -10,6 +10,8 @@ def get_original_format(num_str):
             return 'octal'
         elif num_str.lower().startswith('0x'):
             return 'hexadecimal'
+        elif num_str.lower().startswith('0t'):
+            return 'ternary'
         else:
             return 'decimal'
     
@@ -68,7 +70,7 @@ def p_number(p):
     if isinstance(p[1], int):
         p[0] = ('roman', p[1])
     else:
-        p[0] = (p[1], int(p[1], base))
+        p[0] = (p[1], int(p[1][2:], base))
 
 def p_format(p):
     '''format : FMT_BINARY
